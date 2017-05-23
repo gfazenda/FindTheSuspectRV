@@ -4,12 +4,13 @@ using UnityEngine;
 using System.IO;
 public class ReadDescription : MonoBehaviour {
   public  List<string> fileLines = new List<string>();
-   List<Bone> bones;
-   struct Bone
-    {
-        public string name;
-        public string description;
-    }
+   List<BoneInformation> bones;
+   //struct Bone
+   // {
+   //     public string name;
+   //     public int id;
+   //     public string description;
+   // }
 
 
 	// Use this for initialization
@@ -33,7 +34,7 @@ public class ReadDescription : MonoBehaviour {
         string line;
         while(index < fileLines.Count-1)
         {
-            Bone newBone = new Bone();
+            BoneInformation newBone = new BoneInformation();
             string[] name = fileLines[index].Split(' ');
             
             newBone.name = name[1];
