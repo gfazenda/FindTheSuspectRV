@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+//[CustomEditor(typeof(UIController))]
 public class UIController : MonoBehaviour {
     public List<Image> buttons;
-    [Tooltip("Values in screen %")]
+    public bool autoPopulate = true, horizontal = true, configureAtRuntime = true;
+    [Tooltip("Values in screen % (1 to 100)")]
     public float sizeX, offset, sizeY;
 
 
@@ -13,21 +15,38 @@ public class UIController : MonoBehaviour {
     public Vector2 startPosition;
 	// Use this for initialization
 	void Start () {
-        buttons.AddRange( this.GetComponentsInChildren<Image>());
-        sizeX *= 0.01f; //% to 1/100
-        offset *= 0.01f; //% to 1/100
-        sizeY *= 0.01f;
-        configureUI();
+        if (autoPopulate)
+        {
+            buttons.AddRange(this.GetComponentsInChildren<Image>());
+        }
+
+        if(configureAtRuntime)
+            configureUI();
     }
 	
-    void configureUI()
+   public void configureUI()
     {
-        for (int i = 0; i < buttons.Count; i++)
+        sizeX *= 0.01f; //% to 1/100
+        offset *= 0.01f; //% to 1/100
+        sizeY *= 0.01f;//% to 1/100
+
+        if (horizontal)
         {
-            float x = startPosition.x + (sizeX * i);
-            buttons[i].GetComponent<RectTransform>().anchorMin = new Vector2((float)(x + (i > 0 ? offset : 0)), startPosition.y);
-            buttons[i].GetComponent<RectTransform>().anchorMax = new Vector2((float)(x + sizeX), (float)sizeY);
+            for (int i = 0; i < buttons.Count; i++)
+            {
+                float x = startPosition.x + (sizeX * i) + (i > 0 ? (offset * i) : 0);
+                buttons[i].GetComponent<RectTransform>().anchorMin = new Vector2((float)(x), startPosition.y);
+                buttons[i].GetComponent<RectTransform>().anchorMax = new Vector2((float)(x + sizeX), (float)startPosition.y + sizeY);
+            }
+        }
+        else
+        {
+            for (int i = 0; i < buttons.Count; i++)
+            {
+                float y = startPosition.y + (sizeY * i) + (i > 0 ? (offset * i) : 0);
+                buttons[i].GetComponent<RectTransform>().anchorMin = new Vector2(startPosition.x, (float)y);
+                buttons[i].GetComponent<RectTransform>().anchorMax = new Vector2((float)startPosition.x + sizeX, (float)(y + sizeY));
+            }
         }
     }
-
 }

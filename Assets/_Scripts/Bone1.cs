@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class Bone: MonoBehaviour {
+public class BoneScript: MonoBehaviour {
 	GameObject player;
     BoneInformation _myInfo;
 	public bool isCollected = false;
