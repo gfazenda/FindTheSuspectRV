@@ -38,6 +38,7 @@ public class LeftHand : MonoBehaviour {
             }
             grabbing = true;
             grabbedObject = hits[closestHit].transform.gameObject;
+            grabbedObject.GetComponent<Bone>().setGrabbed();
             grabbedObject.GetComponent<Rigidbody>().isKinematic = true;
             grabbedObject.transform.position = transform.position;
             grabbedObject.transform.parent = transform;
@@ -52,8 +53,8 @@ public class LeftHand : MonoBehaviour {
         if (grabbedObject != null)
         {
             grabbedObject.GetComponent<Rigidbody>().isKinematic = false;
-
-
+            grabbedObject.GetComponent<Bone>().setDropped();
+            grabbedObject.GetComponent<Bone>().TeleportBack();
             grabbedObject.transform.parent = null;
 
             grabbedObject = null;
@@ -69,9 +70,15 @@ public class LeftHand : MonoBehaviour {
             return;
         }
         
-        if (controller.GetPressDown(gripButton) || controller.GetPressDown(triggerButton))
+        if (!grabbing && /*controller.GetPressDown(gripButton) ||*/ controller.GetPressDown(triggerButton))
         {
-
+            Debug.Log("trigger1");
+            Grab();
+        }
+        else if (grabbing && /*controller.GetPressDown(gripButton) ||*/ controller.GetPressDown(triggerButton))
+        {
+            Debug.Log("trigger2");
+            DropObject();
         }
 
 
