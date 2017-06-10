@@ -4,8 +4,8 @@ using System.Collections;
 
 public class Bone: MonoBehaviour {
 	Canvas canvas;
-    BoneInformation _myInfo;
-	public bool isCollected = false;
+
+	public bool isGrabbed = false;
 	Vector3 OriginalPosition;
 	string description;
     public bool show = false;
@@ -23,11 +23,13 @@ public class Bone: MonoBehaviour {
 
     public void setGrabbed()
     {
+        isGrabbed = true;
         canvas.enabled = true;
     }
 
     public void setDropped()
     {
+        isGrabbed = false;
         canvas.enabled = false;
     }
 
