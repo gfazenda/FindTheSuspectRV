@@ -5,6 +5,7 @@ using System.Collections.Generic;
 
 public class Body : MonoBehaviour {
     public List<GameObject> missingBones = new List<GameObject>();
+    public TextMesh feedback;
     [HideInInspector]
     public List<string> boneNames = new List<string>();
     public int ID;
@@ -23,10 +24,46 @@ public class Body : MonoBehaviour {
         GameManager.Instance.setList(ID, boneNames);
     }
 
+    void showText(bool right = true, float duration = 1.2f)
+    {
+       /* Vector3 look = */feedback.gameObject.transform.LookAt(GameManager.Instance._player.transform.position);
+       // Vector3 currPos = feedback.gameObject.transform.position;
+        // currPos
+        if (right)
+        {
+            feedback.text = "Right";
+            feedback.color = Color.green;
+        }
+        else
+        {
+            feedback.text = "Wrong";
+            feedback.color = Color.red;
+        }
+        feedback.gameObject.SetActive(true);
+        Invoke("disableText", duration);
+    }
+
+    private void Update()
+    {
+        // feedback.gameObject.transform.LookAt(GameManager.Instance._player.transform.position);
+        if (feedback.gameObject.activeInHierarchy)
+        {
+            Vector3 targetDir = transform.position - GameManager.Instance._player.transform.position;
+            feedback.gameObject.transform.rotation = Quaternion.LookRotation(targetDir);
+        }
+    }
+
+    void disableText()
+    {
+        feedback.gameObject.SetActive(false);
+    }
+
     bool CheckBone(GameObject bone)
     {
         currentBone = "";
         bool isRight = false;
+        Debug.Log("step 4");
+        Debug.Log(bone.name);
         for (int i = 0; i < boneNames.Count; i++)
         {
             if (bone.name == boneNames[i])
@@ -47,13 +84,15 @@ public class Body : MonoBehaviour {
         if (other.gameObject.tag == Tags.Bone)
         {
             Debug.Log("step1");
-            if (other.GetComponent<Bone>().isGrabbed && CheckBone(other.gameObject))
+            if (!other.GetComponent<Bone>().isGrabbed && CheckBone(other.gameObject))
             {
                 Debug.Log("step2");
                 GameManager.Instance.updateVictims(ID, currentBone);
+                showText();
             }else
             {
                 Debug.Log("step3");
+                showText(false);
                 other.GetComponent<Bone>().TeleportBack();
             }
         }

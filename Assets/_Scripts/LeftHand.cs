@@ -38,7 +38,7 @@ public class LeftHand : MonoBehaviour {
             }
             grabbing = true;
             grabbedObject = hits[closestHit].transform.gameObject;
-            grabbedObject.GetComponent<Bone>().setGrabbed();
+            grabbedObject.GetComponent<Bone>().setGrabbed(this.gameObject);
             grabbedObject.GetComponent<Rigidbody>().isKinematic = true;
             grabbedObject.transform.position = transform.position;
             grabbedObject.transform.parent = transform;

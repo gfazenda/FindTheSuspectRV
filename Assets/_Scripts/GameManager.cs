@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour {
     public Body Table1, Table2, Table3;
     public Victim Victim1, Victim2, Victim3;
     public Text Timer;
+    public GameObject _player;
     public int currentTime = 300;
     int min = 0, sec = 0;
     private void Awake()

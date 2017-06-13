@@ -4,7 +4,7 @@ using System.Collections;
 
 public class Bone: MonoBehaviour {
 	Canvas canvas;
-
+    GameObject player;
 	public bool isGrabbed = false;
 	Vector3 OriginalPosition;
 	string description;
@@ -16,21 +16,34 @@ public class Bone: MonoBehaviour {
 
     }
 
-	//public string getDescription(){
-	//	description = this.GetComponent<Text> ().text;
-	//	return description;
-	//}
-
-    public void setGrabbed()
+    private void Update()
     {
+        if (isGrabbed)
+        {
+            Vector3 pos = player.transform.position;
+            pos.z -= 15;
+            // canvas.transform.position = pos;
+            canvas.transform.LookAt(-pos);
+        }
+    }
+
+    //public string getDescription(){
+    //	description = this.GetComponent<Text> ().text;
+    //	return description;
+    //}
+
+    public void setGrabbed(GameObject player)
+    {
+        this.player = player;
         isGrabbed = true;
-        canvas.enabled = true;
+       // canvas.enabled = true;
     }
 
     public void setDropped()
     {
+        this.player = null;
         isGrabbed = false;
-        canvas.enabled = false;
+        //canvas.enabled = false;
     }
 
     public void TeleportBack(){
